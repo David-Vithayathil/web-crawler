@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "web-crawler"
+version = "0.1.0"
+description = ""
+authors = ["David Vithayathil <davidgeorge.1912@gmail.com>"]
+readme = "README.md"
+packages = [{include = "web_crawler"}]
+
+[tool.poetry.dependencies]
+python = "^3.10.0"
+aiosonic = "^0.16.2"
+redis = "^4.6.0"
+black = "^23.7.0"
+
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
