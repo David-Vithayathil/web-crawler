@@ -1,0 +1,15 @@
+name: Lint code
+
+on: [push, pull_request]
+
+jobs:
+  format_and_test:
+    runs-on: ubuntu-latest
+    
+    steps:        
+      - name: Run Black
+        run: |
+          pip install black
+          black . --check --diff
+        
+
