@@ -2,6 +2,7 @@ import sys
 import aiosonic
 from utils.exceptions import UnknownDownloaderType
 
+
 class Downloader:
     pass
 
@@ -13,10 +14,10 @@ class AiosonicDownloader(Downloader):
     async def get(self, **kwargs):
         """
          Fetches response from server using GET method
-        
+
         Args:
          kwargs: url, headers, timeout parameters to fetch request
-        
+
         Returns:
          response: server response object containing status code and text
         """
@@ -28,17 +29,17 @@ class AiosonicDownloader(Downloader):
 
 def create_downloader(downloader_name=None):
     """
-     Creates and returns downloader object used for downloading response
-    
-     Args:
-      downloader_name: name of the type of downloader to be created
-    
-     Returns:
-      downloader: Downloader object used to download response
+    Creates and returns downloader object used for downloading response
 
-     Raises:
-      ValueError: Error is raised if downloader name is not mentioned
-      UnknownDownloaderType: Error is raised if an undefined downloader is requested
+    Args:
+     downloader_name: name of the type of downloader to be created
+
+    Returns:
+     downloader: Downloader object used to download response
+
+    Raises:
+     ValueError: Error is raised if downloader name is not mentioned
+     UnknownDownloaderType: Error is raised if an undefined downloader is requested
     """
     if not downloader_name:
         raise ValueError("Downloader name is required")

@@ -5,9 +5,10 @@ from utils.logging_config import get_logger
 
 logger = get_logger()
 
+
 async def run():
     """
-     Pushes URLs to queue and fetches response for each URL
+    Pushes URLs to queue and fetches response for each URL
     """
 
     url_queue = UrlQueue()
@@ -32,10 +33,10 @@ async def get_response(url_queue):
 
 def push_urls(url_queue):
     """
-     Pushes URLs to queue
-    
-     Args:
-      url_queue: Queue to which URLs are being pushed
+    Pushes URLs to queue
+
+    Args:
+     url_queue: Queue to which URLs are being pushed
     """
     urls = [
         "http://www.example.com?get=1",
