@@ -1,4 +1,6 @@
+import sys
 import aiosonic
+from utils.exceptions import UnknownDownloaderType
 
 
 class Downloader:
@@ -10,6 +12,15 @@ class AiosonicDownloader(Downloader):
         super().__init__()
 
     async def get(self, **kwargs):
+        """
+         Fetches response from server using GET method
+
+        Args:
+         kwargs: url, headers, timeout parameters to fetch request
+
+        Returns:
+         response: server response object containing status code and text
+        """
         url = kwargs.get("url")
         client = aiosonic.HTTPClient()
         response = await client.get(url)
@@ -17,8 +28,24 @@ class AiosonicDownloader(Downloader):
 
 
 def create_downloader(downloader_name=None):
-    if not downloader_name:
-        raise Exception("Downloader Name not mentioned")
+    """
+    Creates and returns downloader object used for downloading response
 
-    downloader_mapping = {"aiosonic": AiosonicDownloader()}
-    return downloader_mapping[downloader_name]
+    Args:
+     downloader_name: name of the type of downloader to be created
+
+    Returns:
+     downloader: Downloader object used to download response
+
+    Raises:
+     ValueError: Error is raised if downloader name is not mentioned
+     UnknownDownloaderType: Error is raised if an undefined downloader is requested
+    """
+    if not downloader_name:
+        raise ValueError("Downloader name is required")
+
+    try:
+        downloader = getattr(sys.modules[__name__], downloader_name)()
+        return downloader
+    except AttributeError:
+        raise UnknownDownloaderType()
