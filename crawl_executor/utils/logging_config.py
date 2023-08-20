@@ -1,5 +1,5 @@
 import logging.config
-from utils.exceptions import UndefinedLogHandler
+from crawl_executor.utils.exceptions import UndefinedLogHandler
 
 LOGGING_CONFIG = {
     "version": 1,
