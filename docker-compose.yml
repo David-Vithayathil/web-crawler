@@ -1,0 +1,15 @@
+version: '3'
+services:
+  webcrawler-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    depends_on:
+      - redis
+    environment:
+      - DOCKER_ENV=true
+
+  redis:
+    image: redis:latest
