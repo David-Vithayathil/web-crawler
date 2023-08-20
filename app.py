@@ -6,6 +6,7 @@ from fastapi import FastAPI, Request, Query
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 
+from crawl_executor.utils.logging_config import get_logger
 from crawl_executor.utils.http import Request as HttpRequest
 from crawl_executor.crawler import (
     push_urls,
@@ -16,9 +17,11 @@ from crawl_executor.crawler import (
     retry_request,
 )
 
+
 app = FastAPI()
 app.mount("/static", StaticFiles(directory="static"), name="static")
 templates = Jinja2Templates(directory="templates")
+logger = get_logger()
 
 
 class CrawlerInput(BaseModel):
@@ -38,16 +41,21 @@ def get_crawl_details(request: Request):
 async def execute_crawl(CrawlerInput: CrawlerInput):
     """PUT API to push input urls to URL queue"""
 
-    crawler_id = str(uuid4())
-    urls = CrawlerInput.urls
-    domain = CrawlerInput.crawlerDomain.lower()
-    are_urls_valid, validation_message = validate_urls(urls, domain)
-    if not are_urls_valid:
-        return {"status": 503, "crawler_id": None, "message": validation_message}
-    max_retry_count = CrawlerInput.maxRetryCount
-    requests = [HttpRequest(url, max_retry_count=max_retry_count) for url in urls]
-    push_urls(requests=requests, queue_id=crawler_id)
-    return {"status": 200, "crawler_id": crawler_id}
+    try:
+        crawler_id = str(uuid4())
+        urls = CrawlerInput.urls
+        domain = CrawlerInput.crawlerDomain.lower()
+        are_urls_valid, validation_message = validate_urls(urls, domain)
+        if not are_urls_valid:
+            return {"status": 503, "crawler_id": None, "message": validation_message}
+        max_retry_count = CrawlerInput.maxRetryCount
+        requests = [HttpRequest(url, max_retry_count=max_retry_count) for url in urls]
+        push_urls(requests=requests, queue_id=crawler_id)
+        logger.info("Pushed urls to queue")
+        return {"status": 200, "crawler_id": crawler_id}
+    except Exception as err:
+        logger.error(f"Error log message {err}")
+        return {"status": 200, "crawler_id": crawler_id}
 
 
 @app.get("/api/v1/urls/")

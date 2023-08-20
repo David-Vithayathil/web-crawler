@@ -1,8 +1,10 @@
 from redis import Redis
+from os import environ
 
 
 class UrlQueue:
     def __init__(self, host: str = "localhost", queue_id: str = "10001") -> None:
+        host = "redis" if environ.get("DOCKER_ENV", False) else host
         self.redis_client = Redis(host=host)
         self.queue_name = f"url_queue:{queue_id}"
 
