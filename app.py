@@ -18,11 +18,11 @@ from crawl_executor.crawler import (
 )
 
 
-
 app = FastAPI()
 app.mount("/static", StaticFiles(directory="static"), name="static")
 templates = Jinja2Templates(directory="templates")
 logger = get_logger()
+
 
 class CrawlerInput(BaseModel):
     urls: list
